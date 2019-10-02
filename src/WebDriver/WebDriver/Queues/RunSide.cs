@@ -9,7 +9,7 @@ namespace WebDriver.Functions.Queues
 {
     public class RunSide
     {
-        [FunctionName("RunSide")]
+        [FunctionName("RunSide-Queue")]
         public void Run([QueueTrigger("webdriver", Connection = "WebDriverStorageConnectionString")] string sideItem,
             ILogger logger)
         {
