@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using OpenQA.Selenium.Chrome;
 using System;
+using System.IO;
 using WebDriver.Functions.Selenium;
 
 namespace WebDriver.Functions.Queues
@@ -20,7 +21,10 @@ namespace WebDriver.Functions.Queues
                 foreach (var test in side.Tests)
                 {
                     logger.LogInformation($"Starting test {test.Name}");
-                    using (var driver = new Driver(new ChromeDriver()))
+                    using (var driver = new Driver(new ChromeDriver(new ChromeOptions
+                    {
+                        BinaryLocation = Path.Combine(Environment.CurrentDirectory, "Chromium-77.0.3865.75-x64", "chrome.exe")
+                    })))
                     {
                         driver.CommandExecuting += (sender, e) =>
                         {

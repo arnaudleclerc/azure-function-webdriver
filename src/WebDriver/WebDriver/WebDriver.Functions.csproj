@@ -21,6 +21,6 @@
     </None>
   </ItemGroup>
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="copy $(ProjectDir)chromedriver.exe $(TargetDir)bin" />
+    <Exec Command="copy $(ProjectDir)Assets\chromedriver.exe $(TargetDir)bin&#xD;&#xA;xcopy $(ProjectDir)Assets\Chromium-77.0.3865.75-x64 $(TargetDir)Chromium-77.0.3865.75-x64 /i /s /y" />
   </Target>
 </Project>

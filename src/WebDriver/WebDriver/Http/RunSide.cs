@@ -20,7 +20,7 @@ namespace WebDriver.Functions.Http
         {
             try
             {
-                using(var reader = new StreamReader(req.Body))
+                using (var reader = new StreamReader(req.Body))
                 {
                     var side = JsonConvert.DeserializeObject<Side>(reader.ReadToEnd());
 
@@ -39,7 +39,10 @@ namespace WebDriver.Functions.Http
                     foreach (var test in side.Tests)
                     {
                         logger.LogInformation($"Starting test {test.Name}");
-                        using (var driver = new Driver(new ChromeDriver()))
+                        using (var driver = new Driver(new ChromeDriver(new ChromeOptions
+                        {
+                            BinaryLocation = Path.Combine(Environment.CurrentDirectory, "Chromium-77.0.3865.75-x64", "chrome.exe")
+                        })))
                         {
                             driver.CommandExecuting += (sender, e) =>
                             {
@@ -58,7 +61,7 @@ namespace WebDriver.Functions.Http
                     return new NoContentResult();
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 logger.LogError(ex, ex.Message);
                 throw;
