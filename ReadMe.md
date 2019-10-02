@@ -1,3 +1,3 @@
-# Automatisation of selenium test suite with Azure Functions
+# Automation of selenium test suite with Azure Functions
 
 This is still a WIP
