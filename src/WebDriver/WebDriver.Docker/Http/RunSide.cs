@@ -39,11 +39,9 @@ namespace WebDriver.Functions.Http
                     foreach (var test in side.Tests)
                     {
                         logger.LogInformation($"Starting test {test.Name}");
-                        //using (var driver = new Driver(new ChromeDriver(Path.Combine(Environment.CurrentDirectory, "Assets"), new ChromeOptions
-                        //{
-                        //    BinaryLocation = Path.Combine(Environment.CurrentDirectory, "Chromium-77.0.3865.75-x64", "chrome.exe")
-                        //})))
-                        using(var driver = new Driver(new ChromeDriver()))
+                        var chromeOptions = new ChromeOptions();
+                        chromeOptions.AddArguments("--headless", "--no-sandbox", "--disable-gpu");
+                        using (var driver = new Driver(new ChromeDriver(chromeOptions)))
                         {
                             driver.CommandExecuting += (sender, e) =>
                             {

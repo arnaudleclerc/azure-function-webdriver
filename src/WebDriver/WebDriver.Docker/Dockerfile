@@ -11,7 +11,11 @@ RUN dpkg -i /chrome.deb || apt-get install -yf
 RUN rm /chrome.deb
 
 # Install chromedriver for Selenium
-RUN curl https://chromedriver.storage.googleapis.com/2.31/chromedriver_linux64.zip -o /home/site/wwwroot/bin/chromedriver
+RUN apt-get update && \
+	apt-get install -y unzip libglib2.0-0 && \
+	wget https://chromedriver.storage.googleapis.com/77.0.3865.40/chromedriver_linux64.zip -P ~/ && \
+	unzip ~/chromedriver_linux64.zip -d /home/site/wwwroot/bin
+
 RUN chmod +x /home/site/wwwroot/bin/chromedriver
 
 FROM mcr.microsoft.com/azure-functions/dotnet:2.0

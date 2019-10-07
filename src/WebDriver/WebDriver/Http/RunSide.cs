@@ -39,10 +39,12 @@ namespace WebDriver.Functions.Http
                     foreach (var test in side.Tests)
                     {
                         logger.LogInformation($"Starting test {test.Name}");
-                        using (var driver = new Driver(new ChromeDriver(new ChromeOptions
+                        var chromeOptions = new ChromeOptions
                         {
                             BinaryLocation = Path.Combine(Environment.CurrentDirectory, "Chromium-77.0.3865.75-x64", "chrome.exe")
-                        })))
+                        };
+                        chromeOptions.AddArguments("--headless");
+                        using (var driver = new Driver(new ChromeDriver(chromeOptions)))
                         {
                             driver.CommandExecuting += (sender, e) =>
                             {
