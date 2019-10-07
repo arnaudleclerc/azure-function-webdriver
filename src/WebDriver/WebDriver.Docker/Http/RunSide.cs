@@ -8,6 +8,7 @@ using OpenQA.Selenium.Chrome;
 using System;
 using System.IO;
 using System.Linq;
+using System.Web.Http;
 using WebDriver.Functions.Selenium;
 
 namespace WebDriver.Functions.Http
@@ -41,7 +42,8 @@ namespace WebDriver.Functions.Http
                         logger.LogInformation($"Starting test {test.Name}");
                         var chromeOptions = new ChromeOptions();
                         chromeOptions.AddArguments("--headless", "--no-sandbox", "--disable-gpu");
-                        using (var driver = new Driver(new ChromeDriver(chromeOptions)))
+                        var service = ChromeDriverService.CreateDefaultService("/usr/bin/", "chromedriver");
+                        using (var driver = new Driver(new ChromeDriver(service, chromeOptions)))
                         {
                             driver.CommandExecuting += (sender, e) =>
                             {
@@ -63,7 +65,7 @@ namespace WebDriver.Functions.Http
             catch (Exception ex)
             {
                 logger.LogError(ex, ex.Message);
-                throw;
+                return new InternalServerErrorResult();
             }
         }
     }
