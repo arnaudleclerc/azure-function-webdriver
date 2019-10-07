@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using OpenQA.Selenium.Chrome;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Web.Http;
@@ -37,11 +38,14 @@ namespace WebDriver.Functions.Http
                         return new BadRequestResult();
                     }
 
+                    var results = new Dictionary<string, string[]>(side.Tests.Length);
+
                     foreach (var test in side.Tests)
                     {
                         logger.LogInformation($"Starting test {test.Name}");
                         var chromeOptions = new ChromeOptions();
                         chromeOptions.AddArguments("--headless", "--no-sandbox", "--disable-gpu");
+                        var testResults = new List<string>(test.Commands.Length);
                         var service = ChromeDriverService.CreateDefaultService("/usr/bin/", "chromedriver");
                         using (var driver = new Driver(new ChromeDriver(service, chromeOptions)))
                         {
@@ -52,14 +56,17 @@ namespace WebDriver.Functions.Http
 
                             driver.CommandExecuted += (sender, e) =>
                             {
+                                testResults.Add($"Executed : {e.Command.Id} | {e.Command.Action} | {e.Command.Target}");
                                 logger.LogInformation($"Executed : {e.Command.Id} | {e.Command.Action} | {e.Command.Target}");
                             };
 
                             driver.Execute(test, side.Url);
+
+                            results.Add(test.Id, testResults.ToArray());
                         }
                     }
 
-                    return new NoContentResult();
+                    return new OkObjectResult(results);
                 }
             }
             catch (Exception ex)
