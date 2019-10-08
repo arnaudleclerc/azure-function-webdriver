@@ -32,4 +32,4 @@ stages:
       inputs:
         azureSubscription: 'azuretekaris'
         appName: 'webdriver'
-        imageName: 'moucheron/webdriver'
+        imageName: 'moucheron/webdriver:v1.0'
