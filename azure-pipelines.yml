@@ -24,5 +24,21 @@ stages:
       inputs:
         containerRegistry: 'dockerarnaud'
         repository: 'moucheron/webdriver'
-        command: 'buildAndPush'
+        command: 'build'
         Dockerfile: '**/Dockerfile'
+
+- stage: Push
+  displayName: Push image
+  jobs:  
+  - job: Push
+    displayName: Push
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps: 
+    - task: Docker@2
+      inputs:
+        containerRegistry: 'dockerarnaud'
+        repository: 'moucheron/webdriver'
+        command: 'push'
+        tags: 'v1.0'
+        addPipelineData: false
