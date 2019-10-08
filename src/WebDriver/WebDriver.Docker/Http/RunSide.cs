@@ -16,7 +16,7 @@ namespace WebDriver.Functions.Http
     public class RunSide
     {
         [FunctionName("RunSide-HTTP")]
-        public IActionResult Run([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "side")] HttpRequest req,
+        public IActionResult Run([HttpTrigger(AuthorizationLevel.Function, "post", Route = "side")] HttpRequest req,
             ILogger logger)
         {
             try
