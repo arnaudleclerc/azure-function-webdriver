@@ -9,7 +9,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Web.Http;
 using WebDriver.Functions.Selenium;
 
 namespace WebDriver.Functions.Http
@@ -38,13 +37,14 @@ namespace WebDriver.Functions.Http
                         return new BadRequestResult();
                     }
 
+                    var results = new Dictionary<string, string[]>();
                     foreach (var test in side.Tests)
                     {
                         logger.LogInformation($"Starting test {test.Name}");
                         var chromeOptions = new ChromeOptions();
                         chromeOptions.AddArguments("--headless", "--no-sandbox", "--disable-gpu");
                         var service = ChromeDriverService.CreateDefaultService("/usr/bin/", "chromedriver");
-                        var results = new List<string>(test.Commands.Length);
+                        var testResults = new List<string>(test.Commands.Length);
                         using (var driver = new Driver(new ChromeDriver(service, chromeOptions)))
                         {
                             driver.CommandExecuting += (sender, e) =>
@@ -54,21 +54,22 @@ namespace WebDriver.Functions.Http
 
                             driver.CommandExecuted += (sender, e) =>
                             {
-                                results.Add($"Executed : {e.Command.Id} | {e.Command.Action} | {e.Command.Target}");
+                                testResults.Add($"Executed : {e.Command.Id} | {e.Command.Action} | {e.Command.Target}");
                                 logger.LogInformation($"Executed : {e.Command.Id} | {e.Command.Action} | {e.Command.Target}");
                             };
 
                             driver.Execute(test, side.Url);
                         }
+                        results.Add(test.Id, testResults.ToArray());
                     }
 
-                    return new NoContentResult();
+                    return new OkObjectResult(results);
                 }
             }
             catch (Exception ex)
             {
                 logger.LogError(ex, ex.Message);
-                return new InternalServerErrorResult();
+                throw;
             }
         }
     }
