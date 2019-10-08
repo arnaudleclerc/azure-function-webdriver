@@ -28,9 +28,8 @@ stages:
         Dockerfile: '**/Dockerfile'
         tags: 'v1.0'
 
-    - task: AzureRmWebAppDeployment@4
+    - task: AzureFunctionAppContainer@1
       inputs:
-        ConnectionType: 'AzureRM'
         azureSubscription: 'azuretekaris'
-        appType: 'functionAppContainer'
-        WebAppName: 'webdriver'
+        appName: 'webdriver'
+        imageName: 'moucheron/webdriver'
