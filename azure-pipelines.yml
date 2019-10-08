@@ -26,3 +26,10 @@ stages:
         repository: 'moucheron/webdriver'
         command: 'buildAndPush'
         Dockerfile: '**/Dockerfile'
+
+    - task: AzureRmWebAppDeployment@4
+      inputs:
+        ConnectionType: 'AzureRM'
+        azureSubscription: 'azuretekaris'
+        appType: 'functionAppContainer'
+        WebAppName: 'webdriver'
