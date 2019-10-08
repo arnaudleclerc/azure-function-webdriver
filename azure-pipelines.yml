@@ -26,6 +26,7 @@ stages:
         repository: 'moucheron/webdriver'
         command: 'buildAndPush'
         Dockerfile: '**/Dockerfile'
+        tags: 'v1.0'
 
     - task: AzureRmWebAppDeployment@4
       inputs:
