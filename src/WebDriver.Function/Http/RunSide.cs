@@ -11,7 +11,7 @@ using System.IO;
 using System.Linq;
 using WebDriver.Selenium;
 
-namespace WebDriver.Docker.Http
+namespace WebDriver.Function.Http
 {
     public class RunSide
     {
@@ -41,11 +41,12 @@ namespace WebDriver.Docker.Http
                     foreach (var test in side.Tests)
                     {
                         logger.LogInformation($"Starting test {test.Name}");
-                        var chromeOptions = new ChromeOptions();
+                        var chromeOptions = new ChromeOptions {
+                            BinaryLocation = Path.Combine(Environment.CurrentDirectory, "ungoogled-chromium-81.0.4044.92-1_windows", "chrome.exe")
+                        };
                         chromeOptions.AddArguments("--headless", "--no-sandbox", "--disable-gpu");
-                        var service = ChromeDriverService.CreateDefaultService("/usr/bin/", "chromedriver");
                         var testResults = new List<string>(test.Commands.Length);
-                        using (var driver = new Driver(new ChromeDriver(service, chromeOptions)))
+                        using (var driver = new Driver(new ChromeDriver(chromeOptions)))
                         {
                             driver.CommandExecuting += (sender, e) =>
                             {

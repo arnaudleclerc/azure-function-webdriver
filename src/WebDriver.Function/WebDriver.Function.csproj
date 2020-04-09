@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <AzureFunctionsVersion>v3</AzureFunctionsVersion>
+    <AzureFunctionsVersion>V3</AzureFunctionsVersion>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="3.0.5" />
@@ -10,6 +10,9 @@
     <ProjectReference Include="..\WebDriver.Selenium\WebDriver.Selenium.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <None Update="chromedriver.exe">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
     <None Update="host.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -18,4 +21,7 @@
       <CopyToPublishDirectory>Never</CopyToPublishDirectory>
     </None>
   </ItemGroup>
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="copy $(ProjectDir)Assets\chromedriver.exe $(TargetDir)bin&#xD;&#xA;xcopy $(ProjectDir)Assets\ungoogled-chromium-81.0.4044.92-1_windows $(TargetDir)ungoogled-chromium-81.0.4044.92-1_windows /i /s /y" />
+  </Target>
 </Project>
