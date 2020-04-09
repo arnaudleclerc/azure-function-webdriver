@@ -1,4 +1,4 @@
-﻿namespace WebDriver.Functions.Selenium
+﻿namespace WebDriver.Selenium
 {
     public class Test
     {

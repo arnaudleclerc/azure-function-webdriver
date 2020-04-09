@@ -9,7 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using WebDriver.Functions.Selenium;
+using WebDriver.Selenium;
 
 namespace WebDriver.Functions.Http
 {

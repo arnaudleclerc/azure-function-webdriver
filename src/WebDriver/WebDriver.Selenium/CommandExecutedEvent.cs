@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WebDriver.Functions.Selenium
+namespace WebDriver.Selenium
 {
     public delegate void CommandEvent(object sender, CommandEventArgs e);
 
