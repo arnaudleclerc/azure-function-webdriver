@@ -69,6 +69,7 @@ namespace WebDriver.Selenium
                     break;
 
                 case "type":
+                case "sendkeys":
                     GetElement(command.Target).SendKeys(command.Value);
                     break;
 
