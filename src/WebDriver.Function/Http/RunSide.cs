@@ -41,19 +41,20 @@ namespace WebDriver.Function.Http
                     foreach (var test in side.Tests)
                     {
                         logger.LogInformation($"Starting test {test.Name}");
-                        var chromeOptions = new ChromeOptions {
+                        var chromeOptions = new ChromeOptions
+                        {
                             BinaryLocation = Path.Combine(Environment.CurrentDirectory, "ungoogled-chromium-81.0.4044.92-1_windows", "chrome.exe")
                         };
                         chromeOptions.AddArguments("--headless", "--no-sandbox", "--disable-gpu");
                         var testResults = new List<string>(test.Commands.Length);
                         using (var driver = new Driver(new ChromeDriver(chromeOptions)))
                         {
-                            driver.CommandExecuting += (sender, e) =>
+                            driver.OnCommandExecuting += (sender, e) =>
                             {
                                 logger.LogInformation($"Executing : {e.Command.Id} | {e.Command.Action} | {e.Command.Target}");
                             };
 
-                            driver.CommandExecuted += (sender, e) =>
+                            driver.OnCommandExecuted += (sender, e) =>
                             {
                                 testResults.Add($"Executed : {e.Command.Id} | {e.Command.Action} | {e.Command.Target}");
                                 logger.LogInformation($"Executed : {e.Command.Id} | {e.Command.Action} | {e.Command.Target}");

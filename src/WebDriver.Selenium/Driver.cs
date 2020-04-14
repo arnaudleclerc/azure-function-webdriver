@@ -10,8 +10,8 @@ namespace WebDriver.Selenium
         private readonly IWebDriver _driver;
         private readonly WebDriverWait _wait;
 
-        public event CommandEvent CommandExecuting;
-        public event CommandEvent CommandExecuted;
+        public event CommandEvent OnCommandExecuting;
+        public event CommandEvent OnCommandExecuted;
 
         public Driver(IWebDriver driver) : this(driver, TimeSpan.FromSeconds(15)) { }
         public Driver(IWebDriver driver, TimeSpan waitTimeout)
@@ -49,7 +49,7 @@ namespace WebDriver.Selenium
 
         private void ExecuteCommand(Command command)
         {
-            OnCommandExecuting(command);
+            OnCommandExecuting?.Invoke(this, new CommandEventArgs(command));
             switch (command.Action.ToLowerInvariant())
             {
                 case "open":
@@ -72,12 +72,9 @@ namespace WebDriver.Selenium
                 case "sendkeys":
                     GetElement(command.Target).SendKeys(command.Value);
                     break;
-
-                default:
-                    throw new NotImplementedException($"{command.Action} not implemented");
             }
 
-            OnCommandExecuted(command);
+            OnCommandExecuted?.Invoke(this, new CommandEventArgs(command));
         }
 
         private IWebElement GetElement(string target)
@@ -95,16 +92,6 @@ namespace WebDriver.Selenium
                 default:
                     throw new NotImplementedException($"Click on {selector} not implemented");
             }
-        }
-
-        private void OnCommandExecuting(Command command)
-        {
-            CommandExecuting?.Invoke(this, new CommandEventArgs(command));
-        }
-
-        private void OnCommandExecuted(Command command)
-        {
-            CommandExecuted?.Invoke(this, new CommandEventArgs(command));
         }
 
         public void Dispose()
