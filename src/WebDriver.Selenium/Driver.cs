@@ -8,7 +8,7 @@ namespace WebDriver.Selenium
     public class Driver : IDisposable
     {
         private readonly IWebDriver _driver;
-        private readonly WebDriverWait _wait;
+        private readonly TimeSpan _defaultWaitTimeout;
 
         public event CommandEvent OnCommandExecuting;
         public event CommandEvent OnCommandExecuted;
@@ -17,7 +17,7 @@ namespace WebDriver.Selenium
         public Driver(IWebDriver driver, TimeSpan waitTimeout)
         {
             _driver = driver;
-            _wait = new WebDriverWait(_driver, waitTimeout);
+            _defaultWaitTimeout = waitTimeout;
         }
 
         public void Execute(Test test, string rootUrl)
@@ -52,6 +52,10 @@ namespace WebDriver.Selenium
             OnCommandExecuting?.Invoke(this, new CommandEventArgs(command));
             switch (command.Action.ToLowerInvariant())
             {
+                case "click":
+                    GetElement(command.Target).Click();
+                    break;
+                    
                 case "open":
                     if (!string.Equals(_driver.Url, command.Target))
                     {
@@ -59,25 +63,25 @@ namespace WebDriver.Selenium
                     }
                     break;
 
+                case "sendkeys":
+                case "type":
+                    GetElement(command.Target).SendKeys(command.Value);
+                    break;
+
                 case "setwindowsize":
                     var dimensions = command.Target.Split('x');
                     _driver.Manage().Window.Size = new System.Drawing.Size(int.Parse(dimensions[0]), int.Parse(dimensions[1]));
                     break;
 
-                case "click":
-                    GetElement(command.Target).Click();
-                    break;
-
-                case "type":
-                case "sendkeys":
-                    GetElement(command.Target).SendKeys(command.Value);
+                case "waitforelementpresent":
+                    _ = GetElement(command.Target, string.IsNullOrWhiteSpace(command.Value) || !int.TryParse(command.Target, out var timeout) ? null : TimeSpan.FromMilliseconds(timeout) as TimeSpan?);
                     break;
             }
 
             OnCommandExecuted?.Invoke(this, new CommandEventArgs(command));
         }
 
-        private IWebElement GetElement(string target)
+        private IWebElement GetElement(string target, TimeSpan? waitTimeout = null)
         {
             var attributes = target.Split('=');
             var selector = attributes[0];
@@ -86,7 +90,7 @@ namespace WebDriver.Selenium
             switch (selector)
             {
                 case "id":
-                    _wait.Until(driver => driver.FindElement(By.Id(selectorValue)));
+                    new WebDriverWait(_driver, waitTimeout ?? _defaultWaitTimeout).Until(driver => driver.FindElement(By.Id(selectorValue)));
                     return _driver.FindElement(By.Id(selectorValue));
 
                 default:
