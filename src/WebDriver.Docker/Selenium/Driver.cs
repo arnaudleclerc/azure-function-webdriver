@@ -55,7 +55,7 @@ namespace WebDriver.Docker.Selenium
                 case "click":
                     GetElement(command.Target).Click();
                     break;
-                    
+
                 case "open":
                     if (!string.Equals(_driver.Url, command.Target))
                     {
@@ -102,6 +102,10 @@ namespace WebDriver.Docker.Selenium
                 case "id":
                     new WebDriverWait(_driver, waitTimeout ?? _defaultWaitTimeout).Until(driver => driver.FindElement(By.Id(selectorValue)));
                     return _driver.FindElement(By.Id(selectorValue));
+
+                case "css":
+                    new WebDriverWait(_driver, waitTimeout ?? _defaultWaitTimeout).Until(driver => driver.FindElement(By.CssSelector(selectorValue)));
+                    return _driver.FindElement(By.CssSelector(selectorValue));
 
                 default:
                     throw new NotImplementedException($"Click on {selector} not implemented");

@@ -6,5 +6,12 @@ The parser of the Selenium driver is still a work in progress and handles the fo
 
 - click
 - open
-- setwindowssize
+- sendKeys
+- setWindowsSize
 - type
+- waitForElementPresent
+
+The following element selectors are supported :
+
+- css
+- id
