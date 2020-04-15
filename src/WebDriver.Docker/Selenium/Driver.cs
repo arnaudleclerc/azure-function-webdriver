@@ -59,7 +59,17 @@ namespace WebDriver.Docker.Selenium
                 case "open":
                     if (!string.Equals(_driver.Url, command.Target))
                     {
-                        _driver.Navigate().GoToUrl(command.Target);
+                        string target = null;
+                        if (command.Target.StartsWith("http://") || command.Target.StartsWith("https://"))
+                        {
+                            target = command.Target;
+                        }
+                        else
+                        {
+                            var uri = new Uri(_driver.Url);
+                            target = command.Target.StartsWith("/") ? $"{uri.Scheme}://{uri.Host}{target}" : $"{uri.Scheme}://{uri.Host}/{command.Target}";
+                        }
+                        _driver.Navigate().GoToUrl(target);
                     }
                     break;
 
