@@ -3,7 +3,7 @@ using OpenQA.Selenium.Support.UI;
 using System;
 using System.Linq;
 
-namespace WebDriver.Selenium
+namespace WebDriver.Docker.Selenium
 {
     public class Driver : IDisposable
     {

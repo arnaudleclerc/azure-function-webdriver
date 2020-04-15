@@ -9,7 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using WebDriver.Selenium;
+using WebDriver.Docker.Selenium;
 
 namespace WebDriver.Docker.Http
 {
@@ -47,12 +47,12 @@ namespace WebDriver.Docker.Http
                         var testResults = new List<string>(test.Commands.Length);
                         using (var driver = new Driver(new ChromeDriver(service, chromeOptions)))
                         {
-                            driver.CommandExecuting += (sender, e) =>
+                            driver.OnCommandExecuting += (sender, e) =>
                             {
                                 logger.LogInformation($"Executing : {e.Command.Id} | {e.Command.Action} | {e.Command.Target}");
                             };
 
-                            driver.CommandExecuted += (sender, e) =>
+                            driver.OnCommandExecuted += (sender, e) =>
                             {
                                 testResults.Add($"Executed : {e.Command.Id} | {e.Command.Action} | {e.Command.Target}");
                                 logger.LogInformation($"Executed : {e.Command.Id} | {e.Command.Action} | {e.Command.Target}");

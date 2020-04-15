@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WebDriver.Selenium
+namespace WebDriver.Docker.Selenium
 {
     public delegate void CommandEvent(object sender, CommandEventArgs e);
 

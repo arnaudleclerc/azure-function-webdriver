@@ -4,10 +4,8 @@
     <AzureFunctionsVersion>v3</AzureFunctionsVersion>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="3.0.5" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\WebDriver.Selenium\WebDriver.Selenium.csproj" />
+    <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="3.0.6" />
+    <PackageReference Include="Selenium.WebDriver" Version="4.0.0-alpha05" />
   </ItemGroup>
   <ItemGroup>
     <None Update="host.json">

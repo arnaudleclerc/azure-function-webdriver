@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace WebDriver.Selenium
+namespace WebDriver.Docker.Selenium
 {
     public class Command
     {
