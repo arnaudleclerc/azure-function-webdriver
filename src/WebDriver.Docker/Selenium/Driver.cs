@@ -75,7 +75,15 @@ namespace WebDriver.Docker.Selenium
 
                 case "sendkeys":
                 case "type":
-                    GetElement(command.Target).SendKeys(command.Value);
+                    var element = GetElement(command.Target);
+                    if (string.IsNullOrEmpty(command.Value))
+                    {
+                        element.Clear();
+                    }
+                    else
+                    {
+                        element.SendKeys(command.Value);
+                    }
                     break;
 
                 case "setwindowsize":
